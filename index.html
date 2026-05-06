@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>FY27 Marketing - Netsurit</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+/* PASSWORD GATE */
+#pw-gate{position:fixed;inset:0;background:#0d0f16;z-index:9999;display:flex;align-items:center;justify-content:center;}
+#pw-box{background:#111420;border:1px solid #1e2235;border-radius:14px;padding:40px 36px;min-width:320px;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,.7);}
+#pw-box .pw-logo{background:#7a0010;color:#ffb3b3;font-size:.8rem;padding:4px 14px;border-radius:20px;font-weight:700;display:inline-block;margin-bottom:18px;}
+#pw-box h2{color:#fff;font-size:1.15rem;font-weight:700;margin-bottom:6px;font-family:'Segoe UI',Arial,sans-serif;}
+#pw-box p{color:#4b5563;font-size:.82rem;margin-bottom:22px;font-family:'Segoe UI',Arial,sans-serif;}
+#pw-input{width:100%;padding:10px 14px;background:#0d0f16;border:1px solid #1e2235;border-radius:7px;font-size:.95rem;color:#e0e0e0;margin-bottom:10px;outline:none;text-align:center;letter-spacing:.1em;}
+#pw-input:focus{border-color:#E3001B;}
+#pw-btn{width:100%;padding:11px;background:#7a0010;color:#ffb3b3;border:none;border-radius:7px;font-size:.9rem;font-weight:700;cursor:pointer;margin-bottom:8px;}
+#pw-btn:hover{background:#E3001B;color:#fff;}
+#pw-err{color:#f87171;font-size:.78rem;min-height:18px;font-family:'Segoe UI',Arial,sans-serif;}
+
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Segoe UI',Arial,sans-serif;background:#0d0f16;color:#e0e0e0;min-height:100vh}header{background:#111420;border-bottom:1px solid #1e2235;padding:14px 28px;display:flex;align-items:center;justify-content:space-between}header h1{font-size:1.2rem;font-weight:700;color:#fff}.logo-badge{background:#7a0010;color:#ffb3b3;font-size:.75rem;padding:3px 10px;border-radius:20px;font-weight:600}nav{background:#111420;border-bottom:1px solid #1e2235;display:flex;flex-wrap:wrap;align-items:center;padding:0 20px}nav button.tab-btn{padding:13px 18px;border:none;background:none;font-size:.88rem;cursor:pointer;color:#6b7280;border-bottom:2px solid transparent;font-weight:500;transition:all .15s;white-space:nowrap}nav button.tab-btn.active{color:#fff;border-bottom:2px solid #E3001B}nav button.tab-btn:hover{color:#c0c8d8}.edit-toggle{margin-left:auto;padding:6px 14px;background:#1a1f2e;color:#6b7280;border:1px solid #1e2235;border-radius:6px;cursor:pointer;font-size:.82rem;font-weight:600}.edit-toggle.on{background:#7a0010;color:#ffb3b3;border-color:#E3001B}.edit-banner{display:none;background:#1e2a1e;border-bottom:1px solid #2d4a2d;padding:6px 28px;font-size:.8rem;color:#6fcf8a;font-style:italic}.edit-banner.show{display:block}.tab-content{display:none;padding:24px 28px;max-width:1460px;margin:0 auto}.tab-content.active{display:block}.section-title{font-size:1.2rem;font-weight:700;color:#fff;margin-bottom:2px}.section-sub{font-size:.82rem;color:#4b5563;margin-bottom:20px}.stat-grid{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:24px}.stat-card{background:#111420;border:1px solid #1e2235;border-radius:10px;padding:16px 20px;min-width:140px;text-align:center;cursor:pointer}.stat-card .val{font-size:1.7rem;font-weight:700;color:#fff}.stat-card .lbl{font-size:.75rem;color:#4b5563;margin-top:4px;line-height:1.4}.stat-green{border-top:3px solid #4ade80}.stat-green .val{color:#4ade80}.stat-gray{border-top:3px solid #9ca3af}.stat-gray .val{color:#9ca3af}.stat-blue{border-top:3px solid #60a5fa}.stat-blue .val{color:#60a5fa}.stat-red{border-top:3px solid #f87171}.stat-red .val{color:#f87171}.sub-label{font-size:.92rem;font-weight:600;color:#c0c8d8;margin:20px 0 8px}.table-wrap{overflow-x:auto;margin-bottom:4px;border-radius:10px;border:1px solid #1e2235}table{width:100%;border-collapse:collapse;background:#111420;font-size:.86rem;min-width:650px}thead tr{background:#161b2c;border-bottom:1px solid #1e2235}th{padding:10px 16px;text-align:left;font-weight:600;color:#4b5563;font-size:.76rem;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}td{padding:10px 16px;border-bottom:1px solid #161b2c;color:#c0c8d8;cursor:pointer;vertical-align:middle;white-space:nowrap}table td:first-child{white-space:normal;min-width:160px}tr:last-child td{border-bottom:none}tr:hover td{background:#161b2c}.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:.75rem;font-weight:600;white-space:nowrap}.badge::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;flex-shrink:0}.badge-active{background:#052e16;color:#4ade80}.badge-active::before{background:#4ade80}.badge-pipeline{background:#0c1a3a;color:#60a5fa}.badge-pipeline::before{background:#60a5fa}.badge-waiting{background:#2e1f00;color:#fbbf24}.badge-waiting::before{background:#fbbf24}.badge-won{background:#0a2a2a;color:#22d3ee}.badge-won::before{background:#22d3ee}.badge-lost{background:#2e0d0d;color:#f87171}.badge-lost::before{background:#f87171}.badge-set{background:#1e0d3c;color:#c084fc}.badge-set::before{background:#c084fc}.sbadge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:.75rem;font-weight:500;white-space:nowrap}.sbadge::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;flex-shrink:0}.src-bdo{background:#1e1b4b;color:#a5b4fc}.src-bdo::before{background:#818cf8}.src-website{background:#0c1a3a;color:#60a5fa}.src-website::before{background:#3b82f6}.src-tax{background:#052e16;color:#6ee7b7}.src-tax::before{background:#10b981}.src-prospecting{background:#2e1065;color:#c4b5fd}.src-prospecting::before{background:#8b5cf6}.src-microsoft{background:#0c2a3a;color:#7dd3fc}.src-microsoft::before{background:#0ea5e9}.src-referral{background:#0a2230;color:#5eead4}.src-referral::before{background:#14b8a6}.src-crosssell{background:#2e1a00;color:#fcd34d}.src-crosssell::before{background:#f59e0b}.src-blacfox{background:#1a1a1a;color:#d1b3ff}.src-blacfox::before{background:#9f7aea}.src-other{background:#1a1a1a;color:#9ca3af}.src-other::before{background:#6b7280}.pct{font-weight:700;color:#4ade80}.add-row-btn{display:inline-block;margin:7px 0 20px;padding:5px 14px;background:#161b2c;color:#E3001B;border:1px dashed #5a0010;border-radius:5px;cursor:pointer;font-size:.8rem}.won-grid{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:6px}.won-card{background:#111420;border:1px solid #1e2235;border-radius:8px;padding:14px 18px;min-width:210px;flex:1}.won-card .name{font-weight:700;font-size:.93rem;color:#fff;margin-bottom:4px}.won-card .meta{font-size:.78rem;color:#4b5563;line-height:1.5}.note{font-size:.76rem;color:#374151;margin-top:8px;margin-bottom:20px;font-style:italic}.rev-actual{color:#4ade80;font-weight:700}.rev-forecast{color:#60a5fa}.rev-target{color:#6b7280}#edit-sidebar{position:fixed;right:-380px;top:0;width:360px;height:100vh;background:#111420;border-left:1px solid #1e2235;box-shadow:-6px 0 30px rgba(0,0,0,.6);z-index:1000;transition:right .25s;display:flex;flex-direction:column}#edit-sidebar.open{right:0}#esb-header{background:#161b2c;border-bottom:1px solid #1e2235;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;font-weight:700;font-size:.95rem;color:#fff}#esb-close{cursor:pointer;font-size:1.2rem;color:#4b5563}#esb-close:hover{color:#fff}#esb-body{padding:16px;flex:1;overflow-y:auto}#esb-body label{display:block;font-size:.76rem;font-weight:600;color:#4b5563;margin-bottom:3px;margin-top:12px;text-transform:uppercase;letter-spacing:.4px}#esb-body input{width:100%;padding:8px 10px;background:#0d0f16;border:1px solid #1e2235;border-radius:5px;font-size:.86rem;color:#e0e0e0}#esb-save{margin:14px 16px 16px;padding:10px;background:#7a0010;color:#ffb3b3;border:none;border-radius:6px;cursor:pointer;font-size:.9rem;font-weight:700;display:block;width:calc(100% - 32px)}#esb-save:hover{background:#E3001B;color:#fff}
+</style></head><body>
+
+<!-- PASSWORD GATE -->
+<div id="pw-gate">
+  <div id="pw-box">
+    <div class="pw-logo">FY27</div>
+    <h2>Netsurit FY27 Marketing</h2>
+    <p>Enter the password to access this report.</p>
+    <input type="password" id="pw-input" placeholder="Password" onkeydown="if(event.key==='Enter')checkPw()">
+    <button id="pw-btn" onclick="checkPw()">Unlock</button>
+    <div id="pw-err"></div>
+  </div>
+</div>
+
+<header><h1>Netsurit FY27 Marketing</h1><span class="logo-badge">FY27</span></header>
+<nav>
+  <button class="tab-btn active" data-tab="us" onclick="showTab('us')">&#127482;&#127480; US Performance</button>
+  <button class="tab-btn" data-tab="sa" onclick="showTab('sa')">&#127487;&#127462; SA Performance</button>
+  <button class="edit-toggle" id="editToggle" onclick="toggleEdit()">&#9998; Edit Mode</button>
+</nav>
+<div class="edit-banner" id="editBanner">&#9998; Edit Mode ON &#8212; click any row or stat to edit</div>
+<div id="us" class="tab-content active">
+<div class="section-title">US Performance</div><div class="section-sub">Lead Summary &middot; March &amp; April 2026 &middot; YTD View</div>
+<div class="stat-grid"><div class="stat-card stat-green" onclick="editStat(this)"><div class="val">37/35</div><div class="lbl">SQL Leads (Mar+Apr)<br>Actual vs Target</div></div><div class="stat-card stat-gray" onclick="editStat(this)"><div class="val">12</div><div class="lbl">Remaining SALs<br>Meetings to schedule</div></div><div class="stat-card stat-blue" onclick="editStat(this)"><div class="val">80</div><div class="lbl">Open SQLs<br>All open YTD</div></div><div class="stat-card stat-red" onclick="editStat(this)"><div class="val">11</div><div class="lbl">SQLs Lost<br>YTD</div></div><div class="stat-card stat-green" onclick="editStat(this)"><div class="val">7</div><div class="lbl">SQLs Won YTD</div></div></div>
+<p class="sub-label">New Business Revenue &mdash; Actual vs Target vs Forecast</p>
+<div class="table-wrap"><table><thead><tr><th>Month</th><th>Target</th><th>Actual</th><th>% On Target / Actual</th><th>Forecast</th><th>% Forecasted on Target</th></tr></thead><tbody><tr onclick="editRow(this)"><td>March 2026</td><td class="rev-target">$26,154</td><td class="rev-actual">$20,500</td><td><span class="pct" style="color:#f87171">78%</span></td><td class="rev-forecast">&mdash;</td><td>&mdash;</td></tr><tr onclick="editRow(this)"><td>April 2026</td><td class="rev-target">$78,462</td><td class="rev-actual">&mdash;</td><td>&mdash;</td><td class="rev-forecast">&mdash;</td><td>&mdash;</td></tr><tr onclick="editRow(this)"><td>May 2026</td><td class="rev-target">$156,923</td><td class="rev-actual">&mdash;</td><td>&mdash;</td><td class="rev-forecast">&mdash;</td><td>&mdash;</td></tr><tr onclick="editRow(this)"><td>June 2026</td><td class="rev-target">$261,539</td><td class="rev-actual">&mdash;</td><td>&mdash;</td><td class="rev-forecast">&mdash;</td><td>&mdash;</td></tr><tr onclick="editRow(this)"><td>July 2026</td><td class="rev-target">$392,308</td><td class="rev-actual">&mdash;</td><td>&mdash;</td><td class="rev-forecast">&mdash;</td><td>&mdash;</td></tr><tr onclick="editRow(this)"><td>August 2026</td><td class="rev-target">$549,231</td><td class="rev-actual">&mdash;</td><td>&mdash;</td><td class="rev-forecast">&mdash;</td><td>&mdash;</td></tr></tbody></table></div><span class="add-row-btn">+ Add Row</span>
+<p class="sub-label">SQLs Won &mdash; Detail</p>
+<div class="won-grid">
+  <div class="won-card"><div class="name">&#128167; Industrial Waters</div><div class="meta">Cross Sell / Upsell &middot; Innovate &middot; Andrew</div></div>
+  <div class="won-card"><div class="name">&#9997; Lady of Fatima</div><div class="meta">Referral | Client &middot; Leverage Service &middot; Steve</div></div>
+  <div class="won-card"><div class="name">&#127968; The Doe Fund</div><div class="meta">Website &middot; Innovate &middot; Jason</div></div>
+  <div class="won-card"><div class="name">&#127959; Tactical Tailor</div><div class="meta">Referral | Client &middot; Leverage Service &middot; Steve</div></div>
+  <div class="won-card"><div class="name">&#128272; Ghost MSP</div><div class="meta">Referral | Client &middot; Leverage Service &middot; Steve</div></div>
+  <div class="won-card"><div class="name">&#128138; Tieton Village Drugs</div><div class="meta">Website (WA) &middot; Leverage Service &middot; Steve</div></div>
+  <div class="won-card"><div class="name">&#127942; Bott Enterprises</div><div class="meta">BDO Alliance &middot; Leverage Service &middot; Fred</div></div>
+</div><span class="add-row-btn">+ Add Won Deal</span>
+<p class="sub-label">March 2026 &mdash; New Business SQL Activity</p>
+<div class="table-wrap"><table><thead><tr><th>Company</th><th>Status</th><th>Source</th><th>Service</th><th>Owner</th></tr></thead><tbody><tr onclick="editRow(this)"><td>HCJ CPA&#39;s &amp; Advisors</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-bdo">BDO Alliance</span></td><td>Innovate</td><td>Tony</td></tr>
+<tr onclick="editRow(this)"><td>MillarMusar</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-bdo">BDO Alliance</span></td><td>Innovate</td><td>Fred</td></tr>
+<tr onclick="editRow(this)"><td>The Doe Fund</td><td><span class="badge badge-won">WON</span></td><td><span class="sbadge src-website">Website</span></td><td>Innovate</td><td>Jason</td></tr>
+<tr onclick="editRow(this)"><td>EXP GROUP</td><td><span class="badge badge-lost">LOST</span></td><td><span class="sbadge src-website">Website</span></td><td>Innovate</td><td>Fred</td></tr>
+<tr onclick="editRow(this)"><td>Tacoma Screw Products</td><td><span class="badge badge-lost">LOST</span></td><td><span class="sbadge src-website">Website</span></td><td>Leverage Service</td><td>Steve</td></tr>
+<tr onclick="editRow(this)"><td>MICPA</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-tax">Tax &amp; Accounting | State Associations</span></td><td>Innovate</td><td>Fred</td></tr>
+<tr onclick="editRow(this)"><td>ALCPA</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-tax">Tax &amp; Accounting | State Associations</span></td><td>Innovate</td><td>Fred</td></tr>
+<tr onclick="editRow(this)"><td>Vontier</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Innovate</td><td>Andrew</td></tr>
+<tr onclick="editRow(this)"><td>Dynamic Connections</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Innovate</td><td>Tony</td></tr>
+<tr onclick="editRow(this)"><td>Lansing Building Products</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Innovate</td><td>Andrew</td></tr>
+<tr onclick="editRow(this)"><td>Daniels Insurance</td><td><span class="badge badge-lost">LOST</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Leverage Service</td><td>Nathan</td></tr>
+<tr onclick="editRow(this)"><td>Barrett Foundation</td><td><span class="badge badge-lost">LOST</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Leverage Service</td><td>Nathan</td></tr>
+<tr onclick="editRow(this)"><td>Concrete Aggregate &amp; Asphalt</td><td><span class="badge badge-lost">LOST</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Leverage Service</td><td>Nathan</td></tr>
+<tr onclick="editRow(this)"><td>Dragon Fly</td><td><span class="badge badge-lost">LOST</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Leverage Service</td><td>Nathan</td></tr>
+<tr onclick="editRow(this)"><td>Girl Scouts of NM</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Leverage Service</td><td>Nathan</td></tr>
+<tr onclick="editRow(this)"><td>Michell Associates</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Leverage Service</td><td>Robert</td></tr>
+<tr onclick="editRow(this)"><td>Lady of Fatima</td><td><span class="badge badge-won">WON</span></td><td><span class="sbadge src-referral">Referral | Client</span></td><td>Leverage Service</td><td>Steve</td></tr>
+<tr onclick="editRow(this)"><td>Riverside Pediatrics</td><td><span class="badge badge-lost">LOST</span></td><td><span class="sbadge src-referral">Referral | Client</span></td><td>Leverage Service</td><td>Jason</td></tr>
+<tr onclick="editRow(this)"><td>FMS</td><td><span class="badge badge-lost">LOST</span></td><td><span class="sbadge src-referral">Referral | EXCO</span></td><td>Innovate</td><td>Fred</td></tr>
+<tr onclick="editRow(this)"><td>LDI Mechanical</td><td><span class="badge badge-lost">LOST</span></td><td><span class="sbadge src-referral">Referral | EXCO</span></td><td>Leverage Service</td><td>Robert</td></tr>
+<tr onclick="editRow(this)"><td>Burr Salvatore</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-crosssell">Cross Sell / Upsell</span></td><td>Innovate</td><td>Andrew</td></tr>
+<tr onclick="editRow(this)"><td>Industrial Waters</td><td><span class="badge badge-won">WON</span></td><td><span class="sbadge src-crosssell">Cross Sell / Upsell</span></td><td>Innovate</td><td>Andrew</td></tr>
+</tbody></table></div><span class="add-row-btn">+ Add Row</span>
+<p class="sub-label">April 2026 &mdash; New Business SQL Activity</p>
+<div class="table-wrap"><table><thead><tr><th>Company</th><th>Status</th><th>Source</th><th>Service</th><th>Owner</th></tr></thead><tbody><tr onclick="editRow(this)"><td>DWC CPAS &amp; Advisors</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-bdo">BDO Alliance</span></td><td>Innovate</td><td>Tony</td></tr>
+<tr onclick="editRow(this)"><td>Lifesource Irrigation</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-website">Website</span></td><td>Leverage Service</td><td>Jason</td></tr>
+<tr onclick="editRow(this)"><td>JCTA</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-website">Website</span></td><td>Leverage Service</td><td>Jason</td></tr>
+<tr onclick="editRow(this)"><td>Highspring</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-tax">Tax &amp; Accounting | SWTP</span></td><td>Innovate</td><td>Fred</td></tr>
+<tr onclick="editRow(this)"><td>Packer Thomas</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-tax">Tax &amp; Accounting | Pinatagrams</span></td><td>Innovate</td><td>Tony</td></tr>
+<tr onclick="editRow(this)"><td>Ionis</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Innovate</td><td>Andrew</td></tr>
+<tr onclick="editRow(this)"><td>ChristianaCare</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Innovate</td><td>Andrew</td></tr>
+<tr onclick="editRow(this)"><td>Trajan Wealth</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Innovate</td><td>Andrew</td></tr>
+<tr onclick="editRow(this)"><td>Casco Technologies</td><td><span class="badge badge-lost">LOST</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Leverage Service</td><td>Fred</td></tr>
+<tr onclick="editRow(this)"><td>Marris Griebel</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Leverage Service</td><td>Nathan</td></tr>
+<tr onclick="editRow(this)"><td>AENT</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-referral">Referral | Client (BDO)</span></td><td>Innovate</td><td>Andrew</td></tr>
+<tr onclick="editRow(this)"><td>Foot Levelers</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-referral">Referral | EXCO</span></td><td>Leverage Service</td><td>Garry</td></tr>
+<tr onclick="editRow(this)"><td>Ocean Renal Associates</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-referral">Referral | Staff</span></td><td>Leverage Service</td><td>Jason</td></tr>
+<tr onclick="editRow(this)"><td>Skyline Mall Carriers</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-crosssell">Cross Sell / Upsell</span></td><td>Innovate</td><td>Steve</td></tr>
+<tr onclick="editRow(this)"><td>Whitestone</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-crosssell">Cross Sell / Upsell</span></td><td>Innovate</td><td>Andrew</td></tr>
+</tbody></table></div><span class="add-row-btn">+ Add Row</span>
+<p class="sub-label">Lead Sources &mdash; March &amp; April 2026 (Combined)</p>
+<div style="background:#111420;border:1px solid #1e2235;border-radius:10px;padding:14px 20px;margin-bottom:20px;max-width:600px"><canvas id="usChart" height="110"></canvas></div>
+<script>
+window.addEventListener("load",function(){
+  var el=document.getElementById("usChart");
+  if(!el||typeof Chart==="undefined")return;
+  new Chart(el,{type:"bar",data:{labels:["Prospecting", "Referral", "Website", "BDO / Tax & Accounting", "Cross Sell / Upsell"],datasets:[{label:"Leads",data:[13, 7, 5, 7, 4],backgroundColor:["rgba(139,92,246,0.85)","rgba(20,184,166,0.85)","rgba(59,130,246,0.85)","rgba(16,185,129,0.85)","rgba(245,158,11,0.85)"],borderRadius:5,borderSkipped:false}]},options:{indexAxis:"y",responsive:true,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{color:"#6b7280",stepSize:1,precision:0},grid:{color:"#1e2235"}},y:{ticks:{color:"#c0c8d8",font:{size:11}},grid:{display:false}}}}});
+});
+</script>
+
+<p class="sub-label">New Business SAL Leads &mdash; March &amp; April 2026</p>
+<div class="table-wrap"><table><thead><tr><th>Company</th><th>Status</th><th>Source</th><th>Owner</th></tr></thead><tbody><tr onclick="editRow(this)"><td>Creative Planning</td><td><span class="badge badge-set">SET</span></td><td><span class="sbadge src-bdo">BDO Alliance | Pinatagrams</span></td><td>Fred</td></tr>
+<tr onclick="editRow(this)"><td>RRBB</td><td><span class="badge badge-set">SET</span></td><td><span class="sbadge src-bdo">BDO Alliance | Pinatagrams</span></td><td>Fred</td></tr>
+<tr onclick="editRow(this)"><td>JRB</td><td><span class="badge badge-waiting">WAITING</span></td><td><span class="sbadge src-bdo">BDO Alliance | Pinatagrams</span></td><td>Tony</td></tr>
+<tr onclick="editRow(this)"><td>New Wave</td><td><span class="badge badge-waiting">WAITING</span></td><td><span class="sbadge src-website">Website</span></td><td>Jason</td></tr>
+<tr onclick="editRow(this)"><td>Rightway</td><td><span class="badge badge-waiting">WAITING</span></td><td><span class="sbadge src-website">Website</span></td><td>Jason</td></tr>
+<tr onclick="editRow(this)"><td>Abrazos Family Services</td><td><span class="badge badge-waiting">WAITING</span></td><td><span class="sbadge src-website">Website</span></td><td>Nathan</td></tr>
+<tr onclick="editRow(this)"><td>ADFK</td><td><span class="badge badge-waiting">WAITING</span></td><td><span class="sbadge src-tax">Tax &amp; Accounting | Pinatagrams</span></td><td>Tony</td></tr>
+<tr onclick="editRow(this)"><td>RB Advisory Solutions</td><td><span class="badge badge-set">SET</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Fred</td></tr>
+<tr onclick="editRow(this)"><td>Turtle Wax</td><td><span class="badge badge-set">SET</span></td><td><span class="sbadge src-referral">Referral | Client</span></td><td>Andrew / Alex</td></tr>
+<tr onclick="editRow(this)"><td>DLA LLC</td><td><span class="badge badge-set">SET</span></td><td><span class="sbadge src-referral">Referral | EXCO</span></td><td>Fred / Orrin</td></tr>
+<tr onclick="editRow(this)"><td>HOH Water</td><td><span class="badge badge-set">SET</span></td><td><span class="sbadge src-referral">Referral | Client</span></td><td>Andrew / Alex</td></tr>
+<tr onclick="editRow(this)"><td>Chortec</td><td><span class="badge badge-set">SET</span></td><td><span class="sbadge src-blacfox">Blacfox</span></td><td>Andrew</td></tr>
+</tbody></table></div><span class="add-row-btn">+ Add Row</span>
+<p class="sub-label">All Active | Open Deals</p>
+<div class="table-wrap"><table><thead><tr><th>Company</th><th>Status</th><th>Source</th><th>Service</th><th>Owner</th></tr></thead><tbody>
+<!-- BDO Alliance: IN-PIPELINE first, then ACTIVE -->
+<tr onclick="editRow(this)"><td>Suggs Johnson</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-bdo">BDO Alliance</span></td><td>Innovate</td><td>Andrew Cohen</td></tr>
+<tr onclick="editRow(this)"><td>G-Squared</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-bdo">BDO Alliance</span></td><td>Innovate</td><td>Fred Masciangelo</td></tr>
+<tr onclick="editRow(this)"><td>FustCharles</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-bdo">BDO Alliance</span></td><td>Leverage Service</td><td>Fred Masciangelo</td></tr>
+<tr onclick="editRow(this)"><td>Bober Markey Fedorovich</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-bdo">BDO Alliance</span></td><td>Innovate</td><td>Tony Schirack</td></tr>
+<tr onclick="editRow(this)"><td>DWC CPAS &amp; Advisors</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-bdo">BDO Alliance</span></td><td>Innovate</td><td>Tony Schirack</td></tr>
+<tr onclick="editRow(this)"><td>Sorren</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-bdo">BDO Alliance</span></td><td>Innovate</td><td>Andrew Cohen</td></tr>
+<tr onclick="editRow(this)"><td>MillerMusmar CPAs</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-bdo">BDO Alliance</span></td><td>Innovate</td><td>Fred Masciangelo</td></tr>
+<tr onclick="editRow(this)"><td>HCJ CPA&#39;s &amp; Advisors</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-bdo">BDO Alliance</span></td><td>Innovate</td><td>Tony Schirack</td></tr>
+<tr onclick="editRow(this)"><td>Mahoney Sabol</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-bdo">BDO Alliance</span></td><td>Innovate</td><td>Fred Masciangelo</td></tr>
+<tr onclick="editRow(this)"><td>Brixey &amp; Meyer</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-bdo">BDO Alliance</span></td><td>Innovate</td><td>Tony Schirack</td></tr>
+<tr onclick="editRow(this)"><td>HBK</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-bdo">BDO Alliance</span></td><td>Innovate</td><td>Tony Schirack</td></tr>
+<tr onclick="editRow(this)"><td>MBE CPAs</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-bdo">BDO Alliance</span></td><td>Innovate</td><td>Tony Schirack</td></tr>
+<tr onclick="editRow(this)"><td>Nichols &amp; Company</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-bdo">BDO Alliance</span></td><td>Innovate</td><td>Tony Schirack</td></tr>
+<tr onclick="editRow(this)"><td>NorthPoint Tax &amp; Business Advisory</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-bdo">BDO Alliance</span></td><td>Innovate</td><td>Tony Schirack</td></tr>
+<tr onclick="editRow(this)"><td>REA Business Advisors</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-bdo">BDO Alliance</span></td><td>Innovate</td><td>Tony Schirack</td></tr>
+<!-- Website: IN-PIPELINE first, then ACTIVE -->
+<tr onclick="editRow(this)"><td>The Doe Fund</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-website">Website</span></td><td>Innovate</td><td>Jason Edgarton</td></tr>
+<tr onclick="editRow(this)"><td>JCT Development</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-website">Website</span></td><td>Leverage Service</td><td>Jason Edgarton</td></tr>
+<tr onclick="editRow(this)"><td>Max Power Electric, LLC</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-website">Website</span></td><td>Leverage Service</td><td>Steve Seroshek</td></tr>
+<tr onclick="editRow(this)"><td>Torrance County Dispatch Center</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-website">Website</span></td><td>Leverage Service</td><td>Tony Schirack</td></tr>
+<tr onclick="editRow(this)"><td>Lifesource Irrigation</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-website">Website</span></td><td>Leverage Service</td><td>Jason Edgarton</td></tr>
+<tr onclick="editRow(this)"><td>Black Buffalo 3D Corporation</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-website">Website</span></td><td>Leverage Service</td><td>Tony Schirack</td></tr>
+<!-- Tax & Accounting: all ACTIVE -->
+<tr onclick="editRow(this)"><td>Highspring</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-tax">Tax &amp; Accounting | SWTP</span></td><td>Innovate</td><td>Fred Masciangelo</td></tr>
+<tr onclick="editRow(this)"><td>ALCPA</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-tax">Tax &amp; Accounting | State Associations</span></td><td>Innovate</td><td>Fred Masciangelo</td></tr>
+<tr onclick="editRow(this)"><td>CACPA</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-tax">Tax &amp; Accounting | State Associations</span></td><td>Innovate</td><td>Fred Masciangelo</td></tr>
+<tr onclick="editRow(this)"><td>MICPA</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-tax">Tax &amp; Accounting | State Associations</span></td><td>Innovate</td><td>Fred Masciangelo</td></tr>
+<tr onclick="editRow(this)"><td>Packer Thomas</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-tax">Tax &amp; Accounting | Pinatagrams</span></td><td>Innovate</td><td>Tony Schirack</td></tr>
+<tr onclick="editRow(this)"><td>MHCS</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-tax">Tax &amp; Accounting | Prospecting</span></td><td>Innovate</td><td>Tony Schirack</td></tr>
+<tr onclick="editRow(this)"><td>Porter &amp; Company</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-tax">Tax &amp; Accounting | Prospecting</span></td><td>Innovate</td><td>Tony Schirack</td></tr>
+<!-- Prospecting: IN-PIPELINE first, then ACTIVE -->
+
+<tr onclick="editRow(this)"><td>Bowlin Travel Centers, Inc.</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Innovate</td><td>Tony Schirack</td></tr>
+<tr onclick="editRow(this)"><td>High Desert Foot &amp; Ankle</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Leverage Service</td><td>Nathan Stephenson</td></tr>
+<tr onclick="editRow(this)"><td>Marrs Griebel Law, Ltd.</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Leverage Service</td><td>Nathan Stephenson</td></tr>
+<tr onclick="editRow(this)"><td>Mitchell Associates</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Leverage Service</td><td>Robert Kyslinger</td></tr>
+<tr onclick="editRow(this)"><td>Vontier</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Innovate</td><td>Andrew Cohen</td></tr>
+<tr onclick="editRow(this)"><td>Lansing Building Products</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Innovate</td><td>Andrew Cohen</td></tr>
+<tr onclick="editRow(this)"><td>Ionis Pharmaceutical</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Innovate</td><td>Andrew Cohen</td></tr>
+<tr onclick="editRow(this)"><td>ChristianaCare</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Innovate</td><td>Andrew Cohen</td></tr>
+<tr onclick="editRow(this)"><td>Trajan Wealth</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Innovate</td><td>Andrew Cohen</td></tr>
+<tr onclick="editRow(this)"><td>Dynamic Connections</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Innovate</td><td>Tony Schirack</td></tr>
+<tr onclick="editRow(this)"><td>Frost Mortgage Lending Group</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Leverage Service</td><td>Tony Schirack</td></tr>
+<tr onclick="editRow(this)"><td>Better Business Bureau of NM</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Leverage Service</td><td>Nathan Stephenson</td></tr>
+<tr onclick="editRow(this)"><td>Choice Recovery Path</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Leverage Service</td><td>Nathan Stephenson</td></tr>
+<tr onclick="editRow(this)"><td>Fiesta Restaurant Group</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Leverage Service</td><td>Nathan Stephenson</td></tr>
+<tr onclick="editRow(this)"><td>Joy Junction</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Leverage Service</td><td>Nathan Stephenson</td></tr>
+<tr onclick="editRow(this)"><td>KiloNewton</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Leverage Service</td><td>Nathan Stephenson</td></tr>
+<tr onclick="editRow(this)"><td>LiquiServe</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Leverage Service</td><td>Nathan Stephenson</td></tr>
+<tr onclick="editRow(this)"><td>New Mexico Lottery</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Leverage Service</td><td>Nathan Stephenson</td></tr>
+<tr onclick="editRow(this)"><td>RMS Foods</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Leverage Service</td><td>Nathan Stephenson</td></tr>
+<tr onclick="editRow(this)"><td>VRECCA</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Leverage Service</td><td>Nathan Stephenson</td></tr>
+<tr onclick="editRow(this)"><td>All World Travel</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Leverage Service</td><td>Nathan Stephenson</td></tr>
+<tr onclick="editRow(this)"><td>Girl Scouts of New Mexico</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Leverage Service</td><td>Nathan Stephenson</td></tr>
+<tr onclick="editRow(this)"><td>The Club at Las Campanas</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Leverage Service</td><td>Nathan Stephenson</td></tr>
+<!-- Referral: IN-PIPELINE first, then ACTIVE -->
+<tr onclick="editRow(this)"><td>AENT</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-referral">Referral | Client | BDO</span></td><td>Innovate</td><td>Andrew Cohen</td></tr>
+<tr onclick="editRow(this)"><td>The RMG Group</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-referral">Referral | EXCO</span></td><td>Innovate</td><td>Garry Feldman</td></tr>
+<tr onclick="editRow(this)"><td>SMI Aware</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-referral">Referral | EXCO</span></td><td>Innovate</td><td>Andrew Cohen</td></tr>
+<tr onclick="editRow(this)"><td>FoW Partners</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-referral">Referral | Client</span></td><td>Innovate</td><td>Andrew Cohen</td></tr>
+<tr onclick="editRow(this)"><td>ETE Reman</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-referral">Referral | EXCO</span></td><td>Innovate</td><td>Andrew Cohen</td></tr>
+<tr onclick="editRow(this)"><td>Foot Levelers</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-referral">Referral | EXCO</span></td><td>Leverage Service</td><td>Garry Feldman</td></tr>
+<tr onclick="editRow(this)"><td>Titan Industries, Inc.</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-referral">Referral | EXCO</span></td><td>Innovate</td><td>Robert Kyslinger</td></tr>
+<tr onclick="editRow(this)"><td>K Investments, Inc.</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-referral">Referral | Client</span></td><td>Innovate</td><td>Garry Feldman</td></tr>
+<tr onclick="editRow(this)"><td>Eaton Fiber</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-referral">Referral | Client</span></td><td>Leverage Service</td><td>Robert Kyslinger</td></tr>
+<tr onclick="editRow(this)"><td>Ocean Renal Associates</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-referral">Referral | Staff</span></td><td>Leverage Service</td><td>Jason Edgarton</td></tr>
+<!-- Cross Sell: IN-PIPELINE first, then ACTIVE -->
+<tr onclick="editRow(this)"><td>Blair Potts</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-crosssell">Cross Sell / Upsell</span></td><td>Innovate</td><td>Andrew Cohen</td></tr>
+<tr onclick="editRow(this)"><td>Fifth Season Investments</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-crosssell">Cross Sell / Upsell</span></td><td>Innovate</td><td>Andrew Cohen</td></tr>
+<tr onclick="editRow(this)"><td>CECG</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-crosssell">Cross Sell / Upsell</span></td><td>Leverage Service</td><td>Jason Edgarton</td></tr>
+<tr onclick="editRow(this)"><td>Moody National</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-crosssell">Cross Sell / Upsell</span></td><td>Innovate</td><td>Andrew Cohen</td></tr>
+<tr onclick="editRow(this)"><td>Freshpet</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-crosssell">Cross Sell / Upsell</span></td><td>Innovate</td><td>Andrew Cohen</td></tr>
+<tr onclick="editRow(this)"><td>Novo Nordisk</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-crosssell">Cross Sell / Upsell</span></td><td>Innovate</td><td>Andrew Cohen</td></tr>
+<tr onclick="editRow(this)"><td>Richlite Company</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-crosssell">Cross Sell / Upsell</span></td><td>Innovate</td><td>Andrew Cohen</td></tr>
+<tr onclick="editRow(this)"><td>Engineering Constructors</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-crosssell">Cross Sell / Upsell</span></td><td>Innovate</td><td>Andrew Cohen</td></tr>
+<tr onclick="editRow(this)"><td>WestStar Loan</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-crosssell">Cross Sell / Upsell</span></td><td>Innovate</td><td>Andrew Cohen</td></tr>
+<tr onclick="editRow(this)"><td>Burr Salvatore</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-crosssell">Cross Sell / Upsell</span></td><td>Innovate</td><td>Andrew Cohen</td></tr>
+<tr onclick="editRow(this)"><td>HP Recycles</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-crosssell">Cross Sell / Upsell</span></td><td>Innovate</td><td>Andrew Cohen</td></tr>
+<tr onclick="editRow(this)"><td>Xponential Fitness</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-crosssell">Cross Sell / Upsell</span></td><td>Innovate</td><td>Andrew Cohen</td></tr>
+<tr onclick="editRow(this)"><td>Skyline Mail Carriers</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-crosssell">Cross Sell / Upsell</span></td><td>Innovate</td><td>Steve Seroshek</td></tr>
+<tr onclick="editRow(this)"><td>Whitestone</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-crosssell">Cross Sell / Upsell</span></td><td>Innovate</td><td>Andrew Cohen</td></tr>
+<tr onclick="editRow(this)"><td>Climate Emergency Collaboration</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-crosssell">Cross Sell / Upsell</span></td><td>Leverage Service</td><td>Jason Edgarton</td></tr>
+<tr onclick="editRow(this)"><td>Silicon Overdrive</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-crosssell">Cross Sell / Upsell</span></td><td>Leverage Service</td><td>Jason Edgarton</td></tr>
+<tr onclick="editRow(this)"><td>Priest &amp; Miller</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-crosssell">Cross Sell / Upsell</span></td><td>Innovate</td><td>Tony Schirack</td></tr>
+<!-- Other: IN-PIPELINE first, then ACTIVE -->
+<tr onclick="editRow(this)"><td>Hikma Pharmaceuticals</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-other">Jumpfactor</span></td><td>Innovate</td><td>Andrew Cohen</td></tr>
+<tr onclick="editRow(this)"><td>Tyme Global</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-other">Sales Boutique</span></td><td>Leverage Service</td><td>Jason Edgarton</td></tr>
+</tbody></table></div><span class="add-row-btn">+ Add Row</span>
+<p class="note">IN-PIPELINE = current pipeline &nbsp;|&nbsp; ACTIVE = March / April SQL lists</p>
+
+<div style="margin:28px 0 20px">
+  <p class="section-label" style="margin-bottom:14px;">All Active &amp; Open Deals &mdash; Lead Breakdown</p>
+  <div style="display:flex;flex-wrap:wrap;gap:16px;">
+    <div style="background:#111420;border:1px solid #1e2235;border-radius:10px;padding:14px 18px;flex:2;min-width:260px;max-width:420px;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#8892a4;margin-bottom:10px;">By Lead Source</div>
+      <div style="position:relative;height:210px;"><canvas id="odSrc"></canvas></div>
+    </div>
+    <div style="background:#111420;border:1px solid #1e2235;border-radius:10px;padding:14px 18px;flex:1;min-width:200px;max-width:260px;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#8892a4;margin-bottom:10px;">Pipeline vs Active</div>
+      <div style="position:relative;height:210px;"><canvas id="odStatus"></canvas></div>
+    </div>
+    <div style="background:#111420;border:1px solid #1e2235;border-radius:10px;padding:14px 18px;flex:1;min-width:200px;max-width:260px;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#8892a4;margin-bottom:10px;">Innovate vs Leverage</div>
+      <div style="position:relative;height:210px;"><canvas id="odSvc"></canvas></div>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  function renderCharts(){
+    if(typeof Chart==='undefined') return;
+    if(window._odChartsRendered) return;
+    var c1=document.getElementById('odSrc');
+    var c2=document.getElementById('odStatus');
+    var c3=document.getElementById('odSvc');
+    if(!c1||!c2||!c3) return;
+    if(c1.offsetWidth===0) return;
+    window._odChartsRendered=true;
+    new Chart(c1,{type:'bar',data:{labels:["BDO/Alliance", "Website", "Tax & Acctg", "Prospecting", "Referral", "Cross Sell", "Other"],datasets:[{data:[15, 6, 7, 23, 10, 17, 2],backgroundColor:["#b48cff", "#6fe7ff", "#ffb84d", "#ff8cb4", "#7aa7ff", "#ffd264", "#5cffda"],borderRadius:5,borderSkipped:false}]},options:{indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return' '+c.parsed.x+' deals';}}}},scales:{x:{grid:{color:'rgba(255,255,255,.06)'},ticks:{color:'#8892a4',font:{size:10}}},y:{grid:{display:false},ticks:{color:'#c0c8d8',font:{size:10}}}},maintainAspectRatio:false}});
+    new Chart(c2,{type:'doughnut',data:{labels:["In-Pipeline", "Active"],datasets:[{data:[32, 48],backgroundColor:['#6bf0a0','#7aa7ff'],borderWidth:2,borderColor:'#111420'}]},options:{plugins:{legend:{position:'bottom',labels:{color:'#c0c8d8',boxWidth:11,padding:10,font:{size:10}}}},maintainAspectRatio:false}});
+    new Chart(c3,{type:'doughnut',data:{labels:["Innovate", "Leverage Service"],datasets:[{data:[51, 29],backgroundColor:['#b48cff','#6fe7ff','#7aa7ff','#ffd264'],borderWidth:2,borderColor:'#111420'}]},options:{plugins:{legend:{position:'bottom',labels:{color:'#c0c8d8',boxWidth:11,padding:10,font:{size:10}}}},maintainAspectRatio:false}});
+  }
+  document.addEventListener('DOMContentLoaded',function(){
+    var _o=window.showTab;
+    window.showTab=function(id){if(_o)_o(id);if(id==='us'){window._odChartsRendered=false;setTimeout(renderCharts,300);}};
+  });
+  window.addEventListener('load',function(){setTimeout(renderCharts,400);});
+})();
+</script>
+</div>
+
+<div id="sa" class="tab-content">
+<div class="section-title">SA Performance</div><div class="section-sub">Lead Summary &middot; March &amp; April 2026 &middot; YTD View</div>
+<div class="stat-grid"><div class="stat-card stat-green" onclick="editStat(this)"><div class="val">30/13</div><div class="lbl">SQL Leads (Mar+Apr)<br>Actual vs Target</div></div><div class="stat-card stat-gray" onclick="editStat(this)"><div class="val">11</div><div class="lbl">Remaining SALs<br>Meetings to schedule</div></div><div class="stat-card stat-blue" onclick="editStat(this)"><div class="val">34</div><div class="lbl">Open SQLs<br>All open YTD</div></div><div class="stat-card stat-red" onclick="editStat(this)"><div class="val">4</div><div class="lbl">SQLs Lost<br>YTD</div></div><div class="stat-card stat-green" onclick="editStat(this)"><div class="val">3</div><div class="lbl">SQLs Won YTD</div></div></div>
+<p class="sub-label">New Business Revenue &mdash; Actual vs Target vs Forecast</p>
+<div class="table-wrap"><table><thead><tr><th>Month</th><th>Target</th><th>Actual</th><th>% On Target / Actual</th><th>Forecast</th><th>% Forecasted on Target</th></tr></thead><tbody><tr onclick="editRow(this)"><td>March 2026</td><td class="rev-target">R0</td><td class="rev-actual">R55,000</td><td><span class="pct">100%</span></td><td class="rev-forecast">&mdash;</td><td>&mdash;</td></tr><tr onclick="editRow(this)"><td>April 2026</td><td class="rev-target">R0</td><td class="rev-actual">R351,000</td><td><span class="pct">100%</span></td><td class="rev-forecast">&mdash;</td><td>&mdash;</td></tr><tr onclick="editRow(this)"><td>May 2026</td><td class="rev-target">R201,700</td><td class="rev-actual">R647,000</td><td><span class="pct">321%</span></td><td class="rev-forecast">R890,852</td><td><span class="pct">392%</span></td></tr><tr onclick="editRow(this)"><td>June 2026</td><td class="rev-target">R605,101</td><td class="rev-actual">R943,000</td><td><span class="pct">146%</span></td><td class="rev-forecast">R1,409,783</td><td><span class="pct">233%</span></td></tr><tr onclick="editRow(this)"><td>July 2026</td><td class="rev-target">R1,210,202</td><td class="rev-actual">R1,239,000</td><td><span class="pct">102%</span></td><td class="rev-forecast">R2,229,514</td><td><span class="pct">184%</span></td></tr><tr onclick="editRow(this)"><td>August 2026</td><td class="rev-target">R2,217,003</td><td class="rev-actual">R1,535,000</td><td><span class="pct" style="color:#f87171">69%</span></td><td class="rev-forecast">R3,075,854</td><td><span class="pct">139%</span></td></tr></tbody></table></div><span class="add-row-btn">+ Add Row</span>
+<p class="sub-label">SQLs Won &mdash; Detail</p>
+<div class="won-grid">
+  <div class="won-card"><div class="name">&#9935; Tshipi Manganese Mining</div><div class="meta">Cross Sell / Upsell &middot; MSSP &middot; Kath</div></div>
+  <div class="won-card"><div class="name">&#127922; Betfred</div><div class="meta">Referral | Staff &middot; Leverage Service &middot; Nugh</div></div>
+  <div class="won-card"><div class="name">&#127795; Merensky Timber</div><div class="meta">Website &middot; MSSP &middot; Cameron</div></div>
+</div><span class="add-row-btn">+ Add Won Deal</span>
+<p class="sub-label">March 2026 &mdash; New Business SQL Activity</p>
+<div class="table-wrap"><table><thead><tr><th>Company</th><th>Status</th><th>Source</th><th>Service</th><th>Owner</th></tr></thead><tbody>
+<tr onclick="editRow(this)"><td>Private Equity Support Services</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-website">Website</span></td><td>Leverage Service</td><td>Kath</td></tr>
+<tr onclick="editRow(this)"><td>Merensky Timber</td><td><span class="badge badge-won">WON</span></td><td><span class="sbadge src-website">Website</span></td><td>MSSP</td><td>Cameron</td></tr>
+<tr onclick="editRow(this)"><td>NFS Group</td><td><span class="badge badge-lost">LOST</span></td><td><span class="sbadge src-tax">Tax &amp; Accounting | Blacfox</span></td><td>Innovate Service</td><td>Kath</td></tr>
+<tr onclick="editRow(this)"><td>Capital LOi</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Leverage Service</td><td>Kath</td></tr>
+<tr onclick="editRow(this)"><td>Public Investment Corporation</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Leverage Service</td><td>Nugh</td></tr>
+<tr onclick="editRow(this)"><td>Blue Flame</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-referral">Referral | EXCO</span></td><td>Innovate</td><td>Jan</td></tr>
+<tr onclick="editRow(this)"><td>Q Advisors</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-referral">Referral | EXCO</span></td><td>Innovate Service</td><td>Jan</td></tr>
+<tr onclick="editRow(this)"><td>GRID</td><td><span class="badge badge-lost">LOST</span></td><td><span class="sbadge src-referral">Referral | EXCO</span></td><td>Innovate Service</td><td>Kath</td></tr>
+<tr onclick="editRow(this)"><td>Betfred</td><td><span class="badge badge-won">WON</span></td><td><span class="sbadge src-referral">Referral | Staff</span></td><td>Leverage Service</td><td>Nugh</td></tr>
+<tr onclick="editRow(this)"><td>Tshipi Manganese Mining</td><td><span class="badge badge-won">WON</span></td><td><span class="sbadge src-crosssell">Cross Sell / Upsell</span></td><td>MSSP</td><td>Kath</td></tr>
+<tr onclick="editRow(this)"><td>Chartered Wealth Solutions</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-crosssell">Cross Sell / Upsell</span></td><td>Innovate Service</td><td>Kath</td></tr>
+<tr onclick="editRow(this)"><td>Henry Fagan Consulting Engineers</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-other">Event</span></td><td>Leverage Service</td><td>Nugh</td></tr>
+<tr onclick="editRow(this)"><td>Triton Express</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-other">Sales Boutique</span></td><td>MSSP</td><td>Kath</td></tr>
+</tbody></table></div><span class="add-row-btn">+ Add Row</span>
+<p class="sub-label">April 2026 &mdash; New Business SQL Activity</p>
+<div class="table-wrap"><table><thead><tr><th>Company</th><th>Status</th><th>Source</th><th>Service</th><th>Owner</th></tr></thead><tbody>
+<tr onclick="editRow(this)"><td>Royal Ortho</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-website">Website</span></td><td>MSSP</td><td>Kath</td></tr>
+<tr onclick="editRow(this)"><td>West Coast Group / Constructive Spaces</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-website">Website</span></td><td>Leverage Service</td><td>Kath</td></tr>
+<tr onclick="editRow(this)"><td>Flamingo Capital Partners</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-website">Website</span></td><td>Leverage Service</td><td>Cameron</td></tr>
+<tr onclick="editRow(this)"><td>Titan Financial Partners / Oryx Partners</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-website">Website</span></td><td>Leverage Service</td><td>Cameron</td></tr>
+<tr onclick="editRow(this)"><td>J Theron and Pietersen Inc</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-tax">Tax &amp; Accounting | Blacfox</span></td><td>Innovate Service</td><td>Kath</td></tr>
+<tr onclick="editRow(this)"><td>Initium Professional Accountants</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-tax">Tax &amp; Accounting | Blacfox</span></td><td>Innovate Service</td><td>Jan</td></tr>
+<tr onclick="editRow(this)"><td>Advoca Auditing</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-tax">Tax &amp; Accounting | Blacfox</span></td><td>Innovate Service</td><td>Jan</td></tr>
+<tr onclick="editRow(this)"><td>PKF Octagon</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-tax">Tax &amp; Accounting | Blacfox</span></td><td>Innovate Service</td><td>Cameron</td></tr>
+<tr onclick="editRow(this)"><td>HDI Group</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-tax">Tax &amp; Accounting | Blacfox</span></td><td>Innovate Service</td><td>Cameron</td></tr>
+<tr onclick="editRow(this)"><td>SA Rugby</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Leverage Service</td><td>Cameron</td></tr>
+<tr onclick="editRow(this)"><td>Mobalyze</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-referral">Referral | EXCO</span></td><td>Leverage Service</td><td>Dewaldt</td></tr>
+<tr onclick="editRow(this)"><td>Hestony Fleet</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-referral">Referral | Client</span></td><td>Leverage Service</td><td>Kath</td></tr>
+<tr onclick="editRow(this)"><td>Motswako Media Group</td><td><span class="badge badge-lost">LOST</span></td><td><span class="sbadge src-referral">Referral | Staff</span></td><td>Leverage Service</td><td>Nugh</td></tr>
+<tr onclick="editRow(this)"><td>Cutronix</td><td><span class="badge badge-lost">LOST</span></td><td><span class="sbadge src-referral">Referral | Staff</span></td><td>Leverage Service</td><td>Cameron</td></tr>
+<tr onclick="editRow(this)"><td>Tshipi Manganese Mining</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-crosssell">Cross Sell / Upsell</span></td><td>Innovate Service</td><td>Kath</td></tr>
+<tr onclick="editRow(this)"><td>Red Rocket</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-microsoft">Microsoft</span></td><td>Innovate Service</td><td>Kath</td></tr>
+<tr onclick="editRow(this)"><td>Legal Expenses Insurance SA (LEZA)</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-other">Sales Boutique</span></td><td>Project</td><td>Cameron</td></tr>
+</tbody></table></div><span class="add-row-btn">+ Add Row</span>
+<p class="sub-label">Lead Sources &mdash; March &amp; April 2026 (Combined)</p>
+<div style="background:#111420;border:1px solid #1e2235;border-radius:10px;padding:14px 20px;margin-bottom:20px;max-width:600px"><canvas id="saChart" height="110"></canvas></div>
+<script>
+window.addEventListener("load",function(){
+  var el=document.getElementById("saChart");
+  if(!el||typeof Chart==="undefined")return;
+  new Chart(el,{type:"bar",data:{labels:["Referral", "Website", "Tax & Acct | Blacfox", "Prospecting", "Cross Sell / Upsell", "Sales Boutique", "Microsoft", "Event"],datasets:[{label:"Leads",data:[8, 6, 6, 3, 3, 2, 1, 1],backgroundColor:["rgba(20,184,166,0.85)","rgba(59,130,246,0.85)","rgba(16,185,129,0.85)","rgba(139,92,246,0.85)","rgba(245,158,11,0.85)","rgba(156,163,175,0.85)","rgba(14,165,233,0.85)","rgba(156,163,175,0.85)"],borderRadius:5,borderSkipped:false}]},options:{indexAxis:"y",responsive:true,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{color:"#6b7280",stepSize:1,precision:0},grid:{color:"#1e2235"}},y:{ticks:{color:"#c0c8d8",font:{size:11}},grid:{display:false}}}}});
+});
+</script>
+
+<p class="sub-label">New Business SAL Leads &mdash; March &amp; April 2026</p>
+<div class="table-wrap"><table><thead><tr><th>Company</th><th>Status</th><th>Source</th><th>Owner</th></tr></thead><tbody>
+<tr onclick="editRow(this)"><td>OHS Business Advisors</td><td><span class="badge badge-set">SET</span></td><td><span class="sbadge src-tax">Tax &amp; Accounting | Blacfox</span></td><td>Jan</td></tr>
+<tr onclick="editRow(this)"><td>Charteris and Barnes</td><td><span class="badge badge-set">SET</span></td><td><span class="sbadge src-tax">Tax &amp; Accounting | Blacfox</span></td><td>Jan</td></tr>
+<tr onclick="editRow(this)"><td>Van Sitterts Registered Auditors</td><td><span class="badge badge-set">SET</span></td><td><span class="sbadge src-tax">Tax &amp; Accounting | Blacfox</span></td><td>Jan</td></tr>
+<tr onclick="editRow(this)"><td>Plumblink</td><td><span class="badge badge-set">SET</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Kath</td></tr>
+<tr onclick="editRow(this)"><td>Santi4</td><td><span class="badge badge-set">SET</span></td><td><span class="sbadge src-referral">Referral | EXCO</span></td><td>Dewaldt</td></tr>
+<tr onclick="editRow(this)"><td>BDOCF</td><td><span class="badge badge-set">SET</span></td><td><span class="sbadge src-referral">Referral | EXCO</span></td><td>Nugh</td></tr>
+<tr onclick="editRow(this)"><td>Katara Hospitality</td><td><span class="badge badge-set">SET</span></td><td><span class="sbadge src-referral">Referral | Client</span></td><td>Nugh</td></tr>
+<tr onclick="editRow(this)"><td>SANTACO</td><td><span class="badge badge-waiting">WAITING</span></td><td><span class="sbadge src-other">Hot Spot</span></td><td>Kath</td></tr>
+<tr onclick="editRow(this)"><td>Treasury One</td><td><span class="badge badge-set">SET</span></td><td><span class="sbadge src-other">Hot Spot</span></td><td>Jan</td></tr>
+<tr onclick="editRow(this)"><td>Route Monitoring</td><td><span class="badge badge-set">SET</span></td><td><span class="sbadge src-crosssell">Cross Sell / Upsell</span></td><td>Jan</td></tr>
+<tr onclick="editRow(this)"><td>Komati Group - AI</td><td><span class="badge badge-waiting">WAITING</span></td><td><span class="sbadge src-crosssell">Cross Sell / Upsell</span></td><td>Jan</td></tr>
+</tbody></table></div><span class="add-row-btn">+ Add Row</span>
+<p class="sub-label">All Active / Open Deals</p>
+<div class="table-wrap"><table><thead><tr><th>Company</th><th>Status</th><th>Source</th><th>Service</th><th>Owner</th></tr></thead><tbody>
+<!-- Website: IN-PIPELINE first, then ACTIVE -->
+<tr onclick="editRow(this)"><td>Private Equity Support Services</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-website">Website</span></td><td>Leverage Service</td><td>Kath</td></tr>
+<tr onclick="editRow(this)"><td>Valor Hospitality</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-website">Website</span></td><td>Leverage Service</td><td>Kath</td></tr>
+<tr onclick="editRow(this)"><td>Industroclean South Africa</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-website">Website</span></td><td>Leverage Service</td><td>Cameron</td></tr>
+<tr onclick="editRow(this)"><td>Boschendal Wine Estate</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-website">Website</span></td><td>Leverage Service</td><td>Kath</td></tr>
+<tr onclick="editRow(this)"><td>MiPlan Asset Management</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-website">Website</span></td><td>Leverage Service</td><td>Kath</td></tr>
+<tr onclick="editRow(this)"><td>Royal Ortho</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-website">Website</span></td><td>MSSP</td><td>Kath</td></tr>
+<tr onclick="editRow(this)"><td>Merensky Timber</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-website">Website</span></td><td>MSSP</td><td>Cameron</td></tr>
+<tr onclick="editRow(this)"><td>Industroclean South Africa</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-website">Website</span></td><td>MSSP</td><td>Cameron</td></tr>
+<tr onclick="editRow(this)"><td>Boschendal Wine Estate</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-website">Website</span></td><td>MSSP</td><td>Kath</td></tr>
+<tr onclick="editRow(this)"><td>Mentis Group</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-website">Website</span></td><td>MSSP</td><td>Kath</td></tr>
+<tr onclick="editRow(this)"><td>West Coast Group / Constructive Spaces</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-website">Website</span></td><td>Leverage Service</td><td>Kath</td></tr>
+<tr onclick="editRow(this)"><td>Flamingo Capital Partners</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-website">Website</span></td><td>Leverage Service</td><td>Cameron</td></tr>
+<tr onclick="editRow(this)"><td>Legal Expenses Insurance SA (LEZA)</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-website">Website</span></td><td>Leverage Service</td><td>Cameron</td></tr>
+<!-- Prospecting: IN-PIPELINE first, then ACTIVE -->
+<tr onclick="editRow(this)"><td>Capital LOi</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Leverage Service</td><td>Kath</td></tr>
+<tr onclick="editRow(this)"><td>Peters Papers</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>MSSP</td><td>Kath</td></tr>
+<tr onclick="editRow(this)"><td>Regulating Africa</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>MSSP</td><td>Kath</td></tr>
+<tr onclick="editRow(this)"><td>Public Investment Corporation</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>MSSP</td><td>Nugh</td></tr>
+<tr onclick="editRow(this)"><td>Rhenus Logistics</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Leverage Service</td><td>Cameron</td></tr>
+<tr onclick="editRow(this)"><td>Italtile Limited</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Leverage Service</td><td>Cameron</td></tr>
+<tr onclick="editRow(this)"><td>Alpha Insurance</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Leverage Service</td><td>Cameron</td></tr>
+<tr onclick="editRow(this)"><td>PPS Healthcare Administrators</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Leverage Service</td><td>Cameron</td></tr>
+<tr onclick="editRow(this)"><td>Montego Pet Nutrition</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Leverage Service</td><td>Cameron</td></tr>
+<tr onclick="editRow(this)"><td>PepsiCo</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Leverage Service</td><td>Cameron</td></tr>
+<tr onclick="editRow(this)"><td>BevCo</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Leverage Service</td><td>Cameron</td></tr>
+<tr onclick="editRow(this)"><td>Biovac</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Leverage Service</td><td>Kath</td></tr>
+<tr onclick="editRow(this)"><td>CSOS</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>Leverage Service</td><td>Cameron</td></tr>
+<tr onclick="editRow(this)"><td>Webber Wentzel</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>MSSP</td><td>Cameron</td></tr>
+<tr onclick="editRow(this)"><td>CCI Global</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-prospecting">Prospecting</span></td><td>MSSP</td><td>Cameron</td></tr>
+<!-- Referral: IN-PIPELINE only -->
+<tr onclick="editRow(this)"><td>Nestle (Nespresso)</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-referral">Referral | Staff</span></td><td>Leverage Service</td><td>Kath</td></tr>
+<!-- Cross Sell: IN-PIPELINE only -->
+<tr onclick="editRow(this)"><td>SSK</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-crosssell">Cross Sell / Upsell</span></td><td>Leverage Service</td><td>Kath</td></tr>
+<tr onclick="editRow(this)"><td>Chartered Wealth Solutions</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-crosssell">Cross Sell / Upsell</span></td><td>Innovate Service</td><td>Kath</td></tr>
+<!-- Other: IN-PIPELINE first, then ACTIVE -->
+<tr onclick="editRow(this)"><td>Henry Fagan Consulting Engineers</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-other">Event</span></td><td>Leverage Service</td><td>Nugh</td></tr>
+<tr onclick="editRow(this)"><td>Triton Express (Plennegy Grp)</td><td><span class="badge badge-pipeline">IN-PIPELINE</span></td><td><span class="sbadge src-other">Sales Boutique</span></td><td>MSSP</td><td>Kath</td></tr>
+<tr onclick="editRow(this)"><td>Trans Hex Group</td><td><span class="badge badge-active">ACTIVE</span></td><td><span class="sbadge src-other">Mawande</span></td><td>MSSP</td><td>Cameron</td></tr>
+</tbody></table></div><span class="add-row-btn">+ Add Row</span>
+<p class="note">Open deals include stages 6 and up. &#9888; Komati Group - AI not in provided data.</p>
+
+<div style="margin:28px 0 20px">
+  <p class="section-label" style="margin-bottom:14px;">All Active &amp; Open Deals &mdash; Lead Breakdown</p>
+  <div style="display:flex;flex-wrap:wrap;gap:16px;">
+    <div style="background:#111420;border:1px solid #1e2235;border-radius:10px;padding:14px 18px;flex:2;min-width:260px;max-width:420px;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#8892a4;margin-bottom:10px;">By Lead Source</div>
+      <div style="position:relative;height:210px;"><canvas id="sa2Src"></canvas></div>
+    </div>
+    <div style="background:#111420;border:1px solid #1e2235;border-radius:10px;padding:14px 18px;flex:1;min-width:200px;max-width:260px;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#8892a4;margin-bottom:10px;">Pipeline vs Active</div>
+      <div style="position:relative;height:210px;"><canvas id="sa2Status"></canvas></div>
+    </div>
+    <div style="background:#111420;border:1px solid #1e2235;border-radius:10px;padding:14px 18px;flex:1;min-width:200px;max-width:260px;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#8892a4;margin-bottom:10px;">Service Breakdown</div>
+      <div style="position:relative;height:210px;"><canvas id="sa2Svc"></canvas></div>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  function renderCharts(){
+    if(typeof Chart==='undefined') return;
+    if(window._saODChartsRendered) return;
+    var c1=document.getElementById('sa2Src');
+    var c2=document.getElementById('sa2Status');
+    var c3=document.getElementById('sa2Svc');
+    if(!c1||!c2||!c3) return;
+    if(c1.offsetWidth===0) return;
+    window._saODChartsRendered=true;
+    new Chart(c1,{type:'bar',data:{labels:["Website", "Prospecting", "Referral", "Cross Sell", "Other"],datasets:[{data:[13, 15, 1, 2, 3],backgroundColor:["#b48cff", "#6fe7ff", "#ffb84d", "#ff8cb4", "#7aa7ff"],borderRadius:5,borderSkipped:false}]},options:{indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return' '+c.parsed.x+' deals';}}}},scales:{x:{grid:{color:'rgba(255,255,255,.06)'},ticks:{color:'#8892a4',font:{size:10}}},y:{grid:{display:false},ticks:{color:'#c0c8d8',font:{size:10}}}},maintainAspectRatio:false}});
+    new Chart(c2,{type:'doughnut',data:{labels:["Active", "In-Pipeline"],datasets:[{data:[15, 19],backgroundColor:['#6bf0a0','#7aa7ff'],borderWidth:2,borderColor:'#111420'}]},options:{plugins:{legend:{position:'bottom',labels:{color:'#c0c8d8',boxWidth:11,padding:10,font:{size:10}}}},maintainAspectRatio:false}});
+    new Chart(c3,{type:'doughnut',data:{labels:["Leverage Service", "MSSP", "Innovate"],datasets:[{data:[21, 12, 1],backgroundColor:['#b48cff','#6fe7ff','#7aa7ff','#ffd264'],borderWidth:2,borderColor:'#111420'}]},options:{plugins:{legend:{position:'bottom',labels:{color:'#c0c8d8',boxWidth:11,padding:10,font:{size:10}}}},maintainAspectRatio:false}});
+  }
+  document.addEventListener('DOMContentLoaded',function(){
+    var _o=window.showTab;
+    window.showTab=function(id){if(_o)_o(id);if(id==='sa'){window._saODChartsRendered=false;setTimeout(renderCharts,300);}};
+  });
+  window.addEventListener('load',function(){setTimeout(renderCharts,400);});
+})();
+</script>
+
+</div>
+
+<div id="edit-sidebar">
+  <div id="esb-header">Edit Item<span id="esb-close" onclick="closeSidebar()">&#10005;</span></div>
+  <div id="esb-body"><p style="color:#374151;font-size:.84rem;margin-top:8px">Click any row or stat to edit.</p></div>
+  <button id="esb-save" onclick="saveEdit()">Save Changes</button>
+</div>
+<script>
+// PASSWORD GATE LOGIC
+function checkPw(){
+  var val=document.getElementById('pw-input').value;
+  var err=document.getElementById('pw-err');
+  // Change 'netsurit2027' below to your desired password
+  if(val==='netsuritmkt2027!'){
+    document.getElementById('pw-gate').style.display='none';
+    err.textContent='';
+  } else {
+    err.textContent='Incorrect password. Please try again.';
+    document.getElementById('pw-input').value='';
+    document.getElementById('pw-input').focus();
+  }
+}
+
+var editMode=false,currentEl=null,currentType=null;
+function showTab(id){
+  document.querySelectorAll('.tab-content').forEach(function(t){t.classList.remove('active');});
+  document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.tab-btn').forEach(function(b){if(b.getAttribute('data-tab')===id){b.classList.add('active');}});
+}
+function toggleEdit(){
+  editMode=!editMode;
+  var btn=document.getElementById('editToggle'),ban=document.getElementById('editBanner');
+  if(editMode){btn.textContent='Edit Mode ON';btn.classList.add('on');ban.classList.add('show');}
+  else{btn.textContent='Edit Mode';btn.classList.remove('on');ban.classList.remove('show');closeSidebar();}
+}
+function editRow(el){
+  if(!editMode)return;
+  currentEl=el;currentType='row';
+  var f='';
+  el.querySelectorAll('td').forEach(function(td,i){
+    var b=td.querySelector('.badge,.sbadge');
+    var v=b?b.textContent.trim():td.textContent.trim();
+    f+='<label>Col '+(i+1)+'</label><input type="text" id="ec'+i+'" value="'+v.replace(/"/g,'&quot;')+'">';
+  });
+  document.getElementById('esb-body').innerHTML=f;
+  document.getElementById('edit-sidebar').classList.add('open');
+}
+function editStat(el){
+  if(!editMode)return;
+  currentEl=el;currentType='stat';
+  var v=el.querySelector('.val').textContent.trim();
+  var l=el.querySelector('.lbl').textContent.trim();
+  document.getElementById('esb-body').innerHTML='<label>Value</label><input type="text" id="ev" value="'+v.replace(/"/g,'&quot;')+'">'+'<label>Label</label><input type="text" id="el2" value="'+l.replace(/"/g,'&quot;')+'">';
+  document.getElementById('edit-sidebar').classList.add('open');
+}
+function saveEdit(){
+  if(!currentEl)return;
+  if(currentType==='row'){
+    currentEl.querySelectorAll('td').forEach(function(td,i){
+      var inp=document.getElementById('ec'+i);if(!inp)return;
+      var b=td.querySelector('.badge,.sbadge');
+      if(b)b.textContent=inp.value.trim();else td.textContent=inp.value;
+    });
+  } else if(currentType==='stat'){
+    currentEl.querySelector('.val').textContent=document.getElementById('ev').value;
+    currentEl.querySelector('.lbl').innerHTML=document.getElementById('el2').value.replace(/ /g,'<br>');
+  }
+  closeSidebar();
+}
+function closeSidebar(){document.getElementById('edit-sidebar').classList.remove('open');currentEl=null;currentType=null;}
+</script></body>
+</html>
